@@ -1,64 +1,40 @@
-import java.util.*;
-
 public class Main {
 
-    // Merge Sort
-    public static void mergeSort(int[] arr, int l, int r) {
-        if (l >= r) return;
-        int m = (l + r) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
-    }
-
-    static void merge(int[] arr, int l, int m, int r) {
-        int[] temp = new int[r - l + 1];
-        int i = l, j = m + 1, k = 0;
-
-        while (i <= m && j <= r) {
-            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
-            else temp[k++] = arr[j++];
-        }
-
-        while (i <= m) temp[k++] = arr[i++];
-        while (j <= r) temp[k++] = arr[j++];
-
-        System.arraycopy(temp, 0, arr, l, temp.length);
-    }
-
-    // Quick Sort DESC
-    public static void quickSort(int[] arr, int low, int high) {
-        if (low < high) {
-            int pi = partition(arr, low, high);
-            quickSort(arr, low, pi - 1);
-            quickSort(arr, pi + 1, high);
-        }
-    }
-
-    static int partition(int[] arr, int low, int high) {
-        int pivot = arr[high];
-        int i = low - 1;
-
-        for (int j = low; j < high; j++) {
-            if (arr[j] > pivot) { // DESC
-                i++;
-                int t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    // Linear Search
+    public static int linearSearch(String[] arr, String target) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            count++;
+            if (arr[i].equals(target)) {
+                System.out.println("Comparisons: " + count);
+                return i;
             }
         }
-        int t = arr[i + 1]; arr[i + 1] = arr[high]; arr[high] = t;
-        return i + 1;
+        return -1;
+    }
+
+    // Binary Search
+    public static int binarySearch(String[] arr, String target) {
+        int low = 0, high = arr.length - 1, count = 0;
+
+        while (low <= high) {
+            count++;
+            int mid = (low + high) / 2;
+            if (arr[mid].equals(target)) {
+                System.out.println("Comparisons: " + count);
+                return mid;
+            }
+            else if (arr[mid].compareTo(target) < 0)
+                low = mid + 1;
+            else high = mid - 1;
+        }
+        return -1;
     }
 
     public static void main(String[] args) {
-        int[] arr = {500, 100, 300};
+        String[] arr = {"accA", "accB", "accB", "accC"};
 
-        mergeSort(arr, 0, arr.length - 1);
-        System.out.println("Merge: " + Arrays.toString(arr));
-
-        quickSort(arr, 0, arr.length - 1);
-        System.out.println("Quick DESC: " + Arrays.toString(arr));
-
-        int total = Arrays.stream(arr).sum();
-        System.out.println("Total: " + total);
+        System.out.println("Linear: " + linearSearch(arr, "accB"));
+        System.out.println("Binary: " + binarySearch(arr, "accB"));
     }
 }
