@@ -1,69 +1,40 @@
-import java.util.*;
-
-class Transaction {
-    String id;
-    double fee;
-    String timestamp;
-
-    public Transaction(String id, double fee, String timestamp) {
-        this.id = id;
-        this.fee = fee;
-        this.timestamp = timestamp;
-    }
-
-    public String toString() {
-        return id + ":" + fee + "@" + timestamp;
-    }
-}
-
 public class Main {
 
-    // Bubble Sort (by fee ASC)
-    public static void bubbleSort(List<Transaction> list) {
-        int n = list.size();
-        for (int i = 0; i < n - 1; i++) {
-            boolean swapped = false;
-            for (int j = 0; j < n - i - 1; j++) {
-                if (list.get(j).fee > list.get(j + 1).fee) {
-                    Collections.swap(list, j, j + 1);
-                    swapped = true;
-                }
+    // Linear Search
+    public static int linearSearch(String[] arr, String target) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            count++;
+            if (arr[i].equals(target)) {
+                System.out.println("Comparisons: " + count);
+                return i;
             }
-            if (!swapped) break;
         }
+        return -1;
     }
 
-    // Insertion Sort (fee + timestamp)
-    public static void insertionSort(List<Transaction> list) {
-        for (int i = 1; i < list.size(); i++) {
-            Transaction key = list.get(i);
-            int j = i - 1;
+    // Binary Search
+    public static int binarySearch(String[] arr, String target) {
+        int low = 0, high = arr.length - 1, count = 0;
 
-            while (j >= 0 &&
-                    (list.get(j).fee > key.fee ||
-                            (list.get(j).fee == key.fee &&
-                                    list.get(j).timestamp.compareTo(key.timestamp) > 0))) {
-                list.set(j + 1, list.get(j));
-                j--;
+        while (low <= high) {
+            count++;
+            int mid = (low + high) / 2;
+            if (arr[mid].equals(target)) {
+                System.out.println("Comparisons: " + count);
+                return mid;
             }
-            list.set(j + 1, key);
+            else if (arr[mid].compareTo(target) < 0)
+                low = mid + 1;
+            else high = mid - 1;
         }
+        return -1;
     }
 
     public static void main(String[] args) {
-        List<Transaction> list = new ArrayList<>();
-        list.add(new Transaction("id1", 10.5, "10:00"));
-        list.add(new Transaction("id2", 25.0, "09:30"));
-        list.add(new Transaction("id3", 5.0, "10:15"));
+        String[] arr = {"accA", "accB", "accB", "accC"};
 
-        bubbleSort(list);
-        System.out.println("Bubble Sort: " + list);
-
-        insertionSort(list);
-        System.out.println("Insertion Sort: " + list);
-
-        // Outliers
-        System.out.print("High fee: ");
-        list.stream().filter(t -> t.fee > 50).forEach(System.out::println);
+        System.out.println("Linear: " + linearSearch(arr, "accB"));
+        System.out.println("Binary: " + binarySearch(arr, "accB"));
     }
 }
